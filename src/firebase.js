@@ -1,12 +1,12 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDJ2RXBo-LMOjNFNxMBcNywAMfiqOPil5Q",
-  authDomain: "jwitter-da9ec.firebaseapp.com",
-  projectId: "jwitter-da9ec",
-  storageBucket: "jwitter-da9ec.appspot.com",
-  messagingSenderId: "503173396293",
-  appId: "1:503173396293:web:ec0cf8c76b694162b8b02c",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGIN_ID,
+  appId: process.env.REACT_APP_APP_ID,
 };
 
 export const app = initializeApp(firebaseConfig);
