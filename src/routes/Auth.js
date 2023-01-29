@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [newAccount, setNewAccount] = useState(true);
 
   const onChange = event => {
     //심플하게 form을 컨트롤 할 수 있는 방법
@@ -16,7 +17,7 @@ const Auth = () => {
     }
   };
   const onSubmit = event => {
-    event.preventDefault();
+    event.preventDefault(); //기본 행위가 실행되는 걸 원치 않는다.
   };
 
   return (
@@ -40,7 +41,7 @@ const Auth = () => {
         />
         <input
           type="submit"
-          placeholder="Log In"
+          value={newAccount ? "Create Account" : "Log In"}
         />
       </form>
 
