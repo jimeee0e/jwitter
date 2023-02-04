@@ -4,6 +4,9 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 
 const Auth = () => {
@@ -22,29 +25,43 @@ const Auth = () => {
       setPassword(value);
     }
   };
+
   const onSubmit = async event => {
     event.preventDefault(); //기본 행위가 실행되는 걸 원치 않는다.
     try {
       let data;
       const auth = getAuth();
       if (newAccount) {
-        //creat account
         const data = await createUserWithEmailAndPassword(
           auth,
           email,
           password
         );
       } else {
-        //log in
         const data = await signInWithEmailAndPassword(auth, email, password);
       }
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       setError(error.message);
     }
   };
   //이전 값을 가져와서 그 값에 반대되는 것을 리턴할 거야.
   const toggleAccount = () => setNewAccount(prev => !prev);
+  const onSocialClick = async event => {
+    // console.log(event.target.name);
+    const {
+      target: { name },
+    } = event;
+    let provide;
+    if (name === "google") {
+      provide = new GoogleAuthProvider();
+    }
+    if (name === "github") {
+      provide = new GithubAuthProvider();
+    }
+    const data = await signInWithPopup(authService, provide);
+    console.log(data);
+  };
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -53,7 +70,7 @@ const Auth = () => {
           type="text"
           placeholder="Email"
           required
-          value={email} //input값들을 가져다 쓰고 싶기때문
+          value={email}
           onChange={onChange}
         />
         <input
@@ -66,17 +83,24 @@ const Auth = () => {
         />
         <input
           type="submit"
-          value={newAccount ? "Create Account" : "Log In"}
+          value={newAccount ? "Sign in" : "Create Account"}
         />
         {error}
       </form>
       <span onClick={toggleAccount}>
-        {newAccount ? "Sign in" : "Create Account"}
+        {newAccount ? "Aren't you a member yet?" : "Sign in"}
       </span>
-
       <div>
-        <button>Continue with Google</button>
-        <button>Continue with Github</button>
+        <button
+          onClick={onSocialClick}
+          name="google">
+          Continue with Google
+        </button>
+        <button
+          onClick={onSocialClick}
+          name="github">
+          Continue with Github
+        </button>
       </div>
     </div>
   );
