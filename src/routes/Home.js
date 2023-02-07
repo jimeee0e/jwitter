@@ -1,15 +1,32 @@
-import { dbService } from "fbase";
-import { addDoc, collection } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import { dbService } from "fbase";
+import { addDoc, collection, getDocs, query } from "firebase/firestore";
 
 const Home = () => {
   const [jweet, setJweet] = useState("");
-  const [jweets, setJweets] = useState([]); //기본값 array
+  const [jweets, setJweets] = useState([]);
+
+  const getJweets = async () => {
+    const q = query(collection(dbService, "jweets"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(doc => {
+      console.log(doc.data());
+      const jweetObj = {
+        ...doc.data,
+        id: doc.id,
+      };
+      setJweets(prev => [jweetObj, ...prev]);
+    });
+  };
+
+  useEffect(() => {
+    getJweets();
+  }, []);
 
   const onSubmit = async event => {
     event.preventDefault();
     try {
-      const docRef = await addDoc(collection(dbService, "jweet"), {
+      const docRef = await addDoc(collection(dbService, "jweets"), {
         jweet,
         createdAt: Date.now(),
       });
@@ -24,6 +41,7 @@ const Home = () => {
   const onChange = ({ target: { value } }) => {
     setJweet(value);
   };
+  console.log(jweets);
 
   return (
     <>
@@ -41,6 +59,13 @@ const Home = () => {
             value="Nweet"
           />
         </form>
+        <div>
+          {jweets.map(jweet => (
+            <div key={jweet.id}>
+              <h4>{jweet.jweet}</h4>
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );
