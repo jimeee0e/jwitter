@@ -1,47 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { dbService } from "fbase";
-import { addDoc, collection, getDocs, query } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, query } from "firebase/firestore";
+import Jweet from "components/Jweet";
 
-const Home = () => {
+const Home = ({ userObj }) => {
   const [jweet, setJweet] = useState("");
   const [jweets, setJweets] = useState([]);
 
-  const getJweets = async () => {
-    const q = query(collection(dbService, "jweets"));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach(doc => {
-      console.log(doc.data());
-      const jweetObj = {
-        ...doc.data,
-        id: doc.id,
-      };
-      setJweets(prev => [jweetObj, ...prev]);
-    });
-  };
-
   useEffect(() => {
-    getJweets();
+    const q = query(collection(dbService, "jweets"));
+    onSnapshot(q, snapshot => {
+      const jweetArr = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      console.log(jweetArr);
+      setJweets(jweetArr);
+    });
   }, []);
 
   const onSubmit = async event => {
     event.preventDefault();
     try {
       const docRef = await addDoc(collection(dbService, "jweets"), {
-        jweet,
+        text: jweet, //jweeet의 value, 즉 state(상태)
         createdAt: Date.now(),
+        creatorId: userObj.uid,
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (error) {
       console.error("Error adding document: ", error);
     }
-
     setJweet("");
   };
   //'event로부터' 즉 event안에 있는 target안에 있는 value를 달라!!
   const onChange = ({ target: { value } }) => {
     setJweet(value);
   };
-  console.log(jweets);
 
   return (
     <>
@@ -56,14 +51,16 @@ const Home = () => {
           />
           <input
             type="submit"
-            value="Nweet"
+            value="Jweet"
           />
         </form>
         <div>
           {jweets.map(jweet => (
-            <div key={jweet.id}>
-              <h4>{jweet.jweet}</h4>
-            </div>
+            <Jweet
+              key={jweet.id}
+              jweetObj={jweet}
+              isOwner={jweet.creatorId === userObj.uid}
+            />
           ))}
         </div>
       </div>
