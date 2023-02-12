@@ -32,7 +32,6 @@ function App() {
       ) : (
         "잠시만 기다려봐"
       )}
-      <footer>&copy; Jwitter {new Date().getFullYear()}</footer>
     </>
   );
 }
