@@ -3,12 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import { dbService, storageService } from "fbase";
 import { addDoc, collection, onSnapshot, query } from "firebase/firestore";
 import Jweet from "components/Jweet";
-import { ref, uploadString } from "firebase/storage";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 
 const Home = ({ userObj }) => {
   const [jweet, setJweet] = useState("");
   const [jweets, setJweets] = useState([]);
-  const [attachment, setAttachment] = useState(); //default는 없음.
+  const [attachment, setAttachment] = useState(""); //default는 없음.
   const fileInput = useRef();
 
   useEffect(() => {
@@ -24,19 +24,30 @@ const Home = ({ userObj }) => {
 
   const onSubmit = async event => {
     event.preventDefault();
-    const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
-    const response = await uploadString(fileRef, attachment, "data_url");
-    console.log(response);
-    // await addDoc(collection(dbService, "jweets"), {
-    //   text: jweet,
-    //   createdAt: Date.now(),
-    //   creatorId: userObj.uid,
-    // });
-    // setJweet("");
+    let attachmentUrl = "";
+
+    if (attachment !== "") {
+      const attachmentRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      const response = await uploadString(
+        attachmentRef,
+        attachment,
+        "data_url"
+      );
+      attachmentUrl = await getDownloadURL(response.ref);
+    }
+
+    const jweetObj = {
+      text: jweet,
+      createdAt: Date.now(),
+      creatorId: userObj.uid,
+      attachmentUrl,
+    };
+    await addDoc(collection(dbService, "jweets"), jweetObj);
+    setJweet("");
   };
   //'event로부터' 즉 event안에 있는 target안에 있는 value를 달라!!
   const onChange = ({ target: { value } }) => {
-    setJweet(value);
+    setJweet("");
   };
 
   const onFileChange = event => {
@@ -44,20 +55,20 @@ const Home = ({ userObj }) => {
       target: { files },
     } = event;
     const theFile = files[0];
-    const reader = new FileReader(); //파일을 갖고 reader를 만든다음
+    const reader = new FileReader();
     reader.onloadend = finishedEvent => {
+      console.log("finishedEvent야", finishedEvent);
       const {
         currentTarget: { result },
       } = finishedEvent;
       setAttachment(result);
     };
-    reader.readAsDataURL(theFile); //readAsDataURL을 사용해서 파일을 읽음
-    //이제 event listener를 file reader에 추가.
+    reader.readAsDataURL(theFile);
   };
 
   const onClearAttachment = () => {
-    setAttachment(null);
-    fileInput.current.value = null;
+    setAttachment("");
+    // fileInput.current.value = null;
   };
 
   return (
