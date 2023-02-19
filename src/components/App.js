@@ -37,6 +37,3 @@ function App() {
 }
 
 export default App;
-
-//커밋테스트 테스트
-//잔디밭 테스트

@@ -9,7 +9,7 @@ const Home = ({ userObj }) => {
   const [jweet, setJweet] = useState("");
   const [jweets, setJweets] = useState([]);
   const [attachment, setAttachment] = useState(""); //default는 없음.
-  const fileInput = useRef();
+  // const fileInput = useRef();
 
   useEffect(() => {
     const q = query(collection(dbService, "jweets"));
@@ -34,6 +34,10 @@ const Home = ({ userObj }) => {
         "data_url"
       );
       attachmentUrl = await getDownloadURL(response.ref);
+      // console.log(
+      //   "getDownloadURL(response.ref)야.",
+      //   await getDownloadURL(attachmentUrl)
+      // );
     }
 
     const jweetObj = {
@@ -44,10 +48,14 @@ const Home = ({ userObj }) => {
     };
     await addDoc(collection(dbService, "jweets"), jweetObj);
     setJweet("");
+    setAttachment("");
   };
   //'event로부터' 즉 event안에 있는 target안에 있는 value를 달라!!
-  const onChange = ({ target: { value } }) => {
-    setJweet("");
+  const onChange = event => {
+    const {
+      target: { value },
+    } = event;
+    setJweet(value);
   };
 
   const onFileChange = event => {
@@ -86,7 +94,7 @@ const Home = ({ userObj }) => {
             type="file"
             accept="image/*"
             onChange={onFileChange}
-            ref={fileInput}
+            // ref={fileInput}
           />
           <input
             type="submit"
