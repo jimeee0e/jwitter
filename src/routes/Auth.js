@@ -14,6 +14,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [newAccount, setNewAccount] = useState(true);
   const [error, setError] = useState("");
+
   const onChange = event => {
     //심플하게 form을 컨트롤 할 수 있는 방법
     const {
@@ -40,7 +41,7 @@ const Auth = () => {
       } else {
         const data = await signInWithEmailAndPassword(auth, email, password);
       }
-      // console.log(data);
+      console.log(data);
     } catch (error) {
       setError(error.message);
     }
@@ -83,12 +84,12 @@ const Auth = () => {
         />
         <input
           type="submit"
-          value={newAccount ? "Sign in" : "Create Account"}
+          value={newAccount ? "Create Account" : "Sign In"}
         />
         {error}
       </form>
       <span onClick={toggleAccount}>
-        {newAccount ? "Aren't you a member yet?" : "Sign in"}
+        {newAccount ? "Sign In" : "Create Account"}
       </span>
       <div>
         <button
