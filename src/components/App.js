@@ -1,44 +1,44 @@
 import React, { useEffect, useState } from "react";
 import AppRouter from "components/Router";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, updateCurrentUser } from "firebase/auth";
 import { authService } from "fbase";
 
 function App() {
   const [init, setInit] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [userObj, setUserObj] = useState(null);
-  //어떻게 기다리냐면
+
   useEffect(() => {
-    // const auth = getAuth();
-    //만약 로그인된다면 onAuthStateChanged 호출될 것이다.
-    //우린 로그인 한 user를 받게된다.
-    onAuthStateChanged(authService, user => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, user => {
       if (user) {
-        setIsLoggedIn(true);
+        setUserObj(user);
         // setUserObj({
         //   displayName: authService.currentUser.displayName
         //     ? authService.currentUser.displayName
         //     : "Anonymous",
         //   uid: authService.currentUser.uid,
         // });
-        setUserObj(user);
-        if (user.displayName === null) {
-          const name = user.email.split("@")[0];
-          user.displayName = name;
-        }
+
+        // setUserObj(user);
+        // if (user.displayName === null) {
+        //   const name = user.email.split("@")[0];
+        //   user.displayName = name;
+        // }
         console.log(user);
-      } else {
-        setIsLoggedIn(false);
-        setUserObj(null);
       }
       setInit(true);
     });
   }, []);
+  const refreshUser = async () => {
+    await updateCurrentUser(authService, authService.currentUser);
+    setUserObj(authService.currentUser);
+  };
   return (
     <>
       {init ? (
         <AppRouter
-          isLoggedIn={isLoggedIn}
+          refreshUser={refreshUser}
+          isLoggedIn={Boolean(userObj)}
           userObj={userObj}
         />
       ) : (

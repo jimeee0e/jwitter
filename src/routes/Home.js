@@ -8,8 +8,7 @@ import { getDownloadURL, ref, uploadString } from "firebase/storage";
 const Home = ({ userObj }) => {
   const [jweet, setJweet] = useState("");
   const [jweets, setJweets] = useState([]);
-  const [attachment, setAttachment] = useState(""); //default는 없음.
-  // const fileInput = useRef();
+  const [attachment, setAttachment] = useState("");
 
   useEffect(() => {
     const q = query(collection(dbService, "jweets"));
@@ -50,7 +49,6 @@ const Home = ({ userObj }) => {
     setJweet("");
     setAttachment("");
   };
-  //'event로부터' 즉 event안에 있는 target안에 있는 value를 달라!!
   const onChange = event => {
     const {
       target: { value },
@@ -76,7 +74,6 @@ const Home = ({ userObj }) => {
 
   const onClearAttachment = () => {
     setAttachment("");
-    // fileInput.current.value = null;
   };
 
   return (
@@ -94,7 +91,6 @@ const Home = ({ userObj }) => {
             type="file"
             accept="image/*"
             onChange={onFileChange}
-            // ref={fileInput}
           />
           <input
             type="submit"
