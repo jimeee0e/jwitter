@@ -1,6 +1,5 @@
-import { authService, dbService } from "fbase";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import { authService } from "fbase";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { updateProfile } from "firebase/auth";
 

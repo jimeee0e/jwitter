@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AppRouter from "components/Router";
-import { getAuth, onAuthStateChanged, updateCurrentUser } from "firebase/auth";
+import { onAuthStateChanged, updateCurrentUser } from "firebase/auth";
 import { authService } from "fbase";
 
 function App() {
@@ -8,27 +8,21 @@ function App() {
   const [userObj, setUserObj] = useState(null);
 
   useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(authService, user => {
       if (user) {
         setUserObj(user);
-        // setUserObj({
-        //   displayName: authService.currentUser.displayName
-        //     ? authService.currentUser.displayName
-        //     : "Anonymous",
-        //   uid: authService.currentUser.uid,
-        // });
-
-        // setUserObj(user);
-        // if (user.displayName === null) {
-        //   const name = user.email.split("@")[0];
-        //   user.displayName = name;
-        // }
+        if (user.displayName === null) {
+          const name = user.email.split("@")[0];
+          user.displayName = name;
+        }
         console.log(user);
+      } else {
+        setUserObj(null);
       }
       setInit(true);
     });
   }, []);
+
   const refreshUser = async () => {
     await updateCurrentUser(authService, authService.currentUser);
     setUserObj(authService.currentUser);
