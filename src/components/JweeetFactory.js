@@ -4,12 +4,17 @@ import { dbService, storageService } from "fbase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 
+import { BsPlusCircleFill } from "react-icons/bs";
+import { RiDeleteBack2Fill } from "react-icons/ri";
 //Jweets생성을 담당
 const JweeetFactory = ({ userObj }) => {
   const [jweet, setJweet] = useState("");
   const [attachment, setAttachment] = useState("");
 
   const onSubmit = async event => {
+    if (jweet === "") {
+      return;
+    }
     event.preventDefault();
     let attachmentUrl = "";
 
@@ -60,34 +65,59 @@ const JweeetFactory = ({ userObj }) => {
     setAttachment("");
   };
   return (
-    <form onSubmit={onSubmit}>
-      <input
-        value={jweet}
-        onChange={onChange}
-        type="text"
-        placeholder="What's on your mind"
-        maxLength={120}
-      />
-      <input
-        type="file"
-        accept="image/*"
-        onChange={onFileChange}
-      />
-      <input
-        type="submit"
-        value="Jweet"
-      />
-      {attachment && (
-        <div>
-          <img
-            src={attachment}
-            width="50px"
-            height="50px"
+    <>
+      {" "}
+      <form
+        onSubmit={onSubmit}
+        className="factoryForm">
+        <div className="factoryInput__container">
+          <input
+            className="factoryInput__input"
+            value={jweet}
+            onChange={onChange}
+            type="text"
+            placeholder="What's on your mind?"
+            maxLength={120}
           />
-          <button onClick={onClearAttachment}>Clear</button>
+          <input
+            type="submit"
+            value="&rarr;"
+            className="factoryInput__arrow"
+          />
         </div>
-      )}
-    </form>
+        <label
+          htmlFor="attach-file"
+          className="factoryInput__label">
+          <span>Add photos</span>
+          <BsPlusCircleFill />
+        </label>
+        <input
+          id="attach-file"
+          type="file"
+          accept="image/*"
+          onChange={onFileChange}
+          style={{
+            opacity: 0,
+          }}
+        />
+        {attachment && (
+          <div className="factoryForm__attachment">
+            <img
+              src={attachment}
+              style={{
+                backgroundImage: attachment,
+              }}
+            />
+            <div
+              className="factoryForm__clear"
+              onClick={onClearAttachment}>
+              <span>Remove</span>
+              <RiDeleteBack2Fill />
+            </div>
+          </div>
+        )}
+      </form>
+    </>
   );
 };
 export default JweeetFactory;

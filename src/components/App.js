@@ -4,7 +4,7 @@ import { onAuthStateChanged, updateCurrentUser } from "firebase/auth";
 import { authService } from "fbase";
 
 function App() {
-  const [init, setInit] = useState(false);
+  const [init, setInit] = useState(false); //firebase가 초기화되기를 기다림, 그런 다음에 로그인여부 상태 바뀌어야함
   const [userObj, setUserObj] = useState(null);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ function App() {
           const name = user.email.split("@")[0];
           user.displayName = name;
         }
-        console.log(user);
+        console.log("유저 있니 없니", user);
       } else {
         setUserObj(null);
       }

@@ -7,6 +7,12 @@ import {
 } from "firebase/auth";
 import AuthForm from "components/AuthForm";
 
+import {
+  AiOutlineTwitter,
+  AiOutlineGoogle,
+  AiFillGithub,
+} from "react-icons/ai";
+
 const Auth = () => {
   const onSocialClick = async event => {
     // console.log(event.target.name);
@@ -23,18 +29,25 @@ const Auth = () => {
     await signInWithPopup(authService, provide);
   };
   return (
-    <div>
+    <div className="authContainer">
+      <AiOutlineTwitter
+        color={"#04AAFF"}
+        size="30"
+        style={{ marginBottom: 30 }}
+      />
       <AuthForm />
-      <div>
+      <div className="authBtns">
         <button
           onClick={onSocialClick}
-          name="google">
-          Continue with Google
+          name="google"
+          className="authBtn">
+          Continue with Google <AiOutlineGoogle />
         </button>
         <button
           onClick={onSocialClick}
-          name="github">
-          Continue with Github
+          name="github"
+          className="authBtn">
+          Continue with Github <AiFillGithub />
         </button>
       </div>
     </div>

@@ -3,6 +3,8 @@ import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import React, { useState } from "react";
 
+import { BsTrash, BsPencilSquare } from "react-icons/bs";
+
 const Jweet = ({ jweetObj, isOwner }) => {
   const [editing, setEditing] = useState(false);
   const [newJweet, setNewJweet] = useState(jweetObj.text);
@@ -34,39 +36,47 @@ const Jweet = ({ jweetObj, isOwner }) => {
     setNewJweet(value);
   };
   return (
-    <div>
+    <div className="nweet">
       {editing ? (
         <>
-          <form onSubmit={onSubmit}>
+          <form
+            onSubmit={onSubmit}
+            className="container jweetEdit">
             <input
               type="text"
               placeholder="Edit your jweet"
               value={newJweet}
               required
+              autoFocus
               onChange={onChange}
             />
             <input
               type="submit"
               value="Update Jweet"
+              className="formBtn"
             />
           </form>
-          <button onClick={toggleEditing}>Cancle</button>
+          <span
+            onClick={toggleEditing}
+            className="formBtn cancelBtn">
+            Cancel
+          </span>
+          {/* <button onClick={toggleEditing}>Cancle</button> */}
         </>
       ) : (
         <>
           <h4>{jweetObj.text}</h4>
-          {jweetObj.attachmentUrl && (
-            <img
-              src={jweetObj.attachmentUrl}
-              width="50px"
-              height="50px"
-            />
-          )}
+          {jweetObj.attachmentUrl && <img src={jweetObj.attachmentUrl} />}
+
           {isOwner && (
-            <>
-              <button onClick={onDeleteClick}>Delete Jweet</button>
-              <button onClick={toggleEditing}>Edite Jweet</button>
-            </>
+            <div className="jweet__actions">
+              <span onClick={onDeleteClick}>
+                <BsTrash />
+              </span>
+              <span onClick={toggleEditing}>
+                <BsPencilSquare />
+              </span>
+            </div>
           )}
         </>
       )}
