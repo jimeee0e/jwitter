@@ -8,9 +8,12 @@ function App() {
   const [userObj, setUserObj] = useState(null);
 
   useEffect(() => {
+    // onAuthStateChanged 로그인 로그아웃 할 때 일어남(중요), 또 어플리케이션이 초기화 될 때 발생함.
+    // firebase는 로그인 했다고 알게된다
     onAuthStateChanged(authService, user => {
       if (user) {
         setUserObj(user);
+        console.log("나와봐", user);
         if (user.displayName === null) {
           const name = user.email.split("@")[0];
           user.displayName = name;
@@ -19,7 +22,7 @@ function App() {
       } else {
         setUserObj(null);
       }
-      setInit(true);
+      setInit(true); //어플리케이션이 언제 시작해도 onAuth~~가 실행되야하기 때문에
     });
   }, []);
 

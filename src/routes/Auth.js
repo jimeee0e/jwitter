@@ -31,23 +31,34 @@ const Auth = () => {
   return (
     <div className="authContainer">
       <AiOutlineTwitter
-        color={"#04AAFF"}
+        color={"#3E54AC"}
         size="30"
-        style={{ marginBottom: 30 }}
+        style={{ marginBottom: 20 }}
       />
+      <h5 className="main-title">
+        지금 전 세계에서 무슨 일이
+        <br /> 일어나고 있는지 알아보세요.
+      </h5>
       <AuthForm />
+      <h5 className="auth-title ">다른 계정이 있으신가요?</h5>
       <div className="authBtns">
         <button
           onClick={onSocialClick}
           name="google"
           className="authBtn">
-          Continue with Google <AiOutlineGoogle />
+          <AiOutlineGoogle
+            color={"#fffbeb"}
+            size="20"
+          />
         </button>
         <button
           onClick={onSocialClick}
           name="github"
           className="authBtn">
-          Continue with Github <AiFillGithub />
+          <AiFillGithub
+            color={"#fffbeb"}
+            size="20"
+          />
         </button>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { AiOutlineTwitter } from "react-icons/ai";
-import { BsFillPersonFill } from "react-icons/bs";
+import { AiFillTwitterCircle } from "react-icons/ai";
+import { BsPersonCircle } from "react-icons/bs";
 
 //home으로 가는 링크랑 유저 profile로 가는 링크
 const Navigation = ({ userObj }) => (
@@ -11,9 +11,9 @@ const Navigation = ({ userObj }) => (
         <Link
           to="/"
           style={{ marginRight: 10 }}>
-          <AiOutlineTwitter
+          <AiFillTwitterCircle
             color={"#04AAFF"}
-            size="50"
+            size="40"
           />
         </Link>
       </li>
@@ -27,9 +27,9 @@ const Navigation = ({ userObj }) => (
             alignItems: "center",
             fontSize: 12,
           }}>
-          <BsFillPersonFill
+          <BsPersonCircle
             color={"#04AAFF"}
-            size="50"
+            size="35"
 
             // size="2x"
           />

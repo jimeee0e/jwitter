@@ -7,7 +7,8 @@ import { BsTrash, BsPencilSquare } from "react-icons/bs";
 
 const Jweet = ({ jweetObj, isOwner }) => {
   const [editing, setEditing] = useState(false);
-  const [newJweet, setNewJweet] = useState(jweetObj.text);
+  const [newJweet, setNewJweet] = useState([jweetObj.text]);
+  // const [newJJweet, setNewJJweet] = useState([jweetObj.creatorName]);
 
   const onDeleteClick = async () => {
     const ok = window.confirm("Are you sure you want to delete this jweet?");
@@ -23,7 +24,7 @@ const Jweet = ({ jweetObj, isOwner }) => {
   const toggleEditing = () => setEditing(prev => !prev);
   const onSubmit = async event => {
     event.preventDefault();
-    console.log(jweetObj, newJweet);
+    console.log("너 뭐들어있냐고", jweetObj, newJweet);
     await updateDoc(doc(dbService, "jweets", `${jweetObj.id}`), {
       text: newJweet, //input에 있는 text
     });
@@ -31,12 +32,12 @@ const Jweet = ({ jweetObj, isOwner }) => {
   };
   const onChange = event => {
     const {
-      target: { value },
+      target: { value, value2 },
     } = event;
     setNewJweet(value);
   };
   return (
-    <div className="nweet">
+    <div className="jweet">
       {editing ? (
         <>
           <form
@@ -50,6 +51,7 @@ const Jweet = ({ jweetObj, isOwner }) => {
               autoFocus
               onChange={onChange}
             />
+
             <input
               type="submit"
               value="Update Jweet"
@@ -65,7 +67,9 @@ const Jweet = ({ jweetObj, isOwner }) => {
         </>
       ) : (
         <>
+          <h4 className="username">{jweetObj.creatorName}</h4>
           <h4>{jweetObj.text}</h4>
+
           {jweetObj.attachmentUrl && <img src={jweetObj.attachmentUrl} />}
 
           {isOwner && (

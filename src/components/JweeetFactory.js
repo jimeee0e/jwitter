@@ -32,6 +32,7 @@ const JweeetFactory = ({ userObj }) => {
       text: jweet,
       createdAt: Date.now(),
       creatorId: userObj.uid,
+      creatorName: userObj.displayName,
       attachmentUrl,
     };
     await addDoc(collection(dbService, "jweets"), jweetObj);
@@ -66,7 +67,6 @@ const JweeetFactory = ({ userObj }) => {
   };
   return (
     <>
-      {" "}
       <form
         onSubmit={onSubmit}
         className="factoryForm">
